@@ -30,8 +30,6 @@
  * Authors:
  *    Eric Anholt <eric@anholt.net>
  *    Keith Packard <keithp@keithp.com>
- * Integration in r2 core api and hackit up
- *    pancake <nopcode.org>
  */
 
 #include "udos/int.h"
@@ -40,16 +38,11 @@
 #include "udos/memory.h"
 #include "udos/log.h"
 
-#define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
-
 /*
  * From Knuth -- a good choice for hash/rehash values is p, p-2 where
  * p and p-2 are both prime.  These tables are sized to have an extra 10%
  * free to avoid exponential performance degradation as the hash table fills
  */
-static const struct {
-	int_size max_entries, size, rehash;
-} hash_sizes[] = {
 	{ 2,		5,		3	  }, // [0]
 	{ 4,		7,		5	  },
 	{ 8,		13,		11	  },
@@ -84,13 +77,4 @@ static const struct {
 };
 
 #define entry_is_free(ht,x) (x < ht->max_entries && !ht->table[x])
-//#define entry_is_deleted(ht,x) (bit_test(ht->free_bitmap,x) && ht->table[x] == (int_64)&deleted_data)
-#define entry_is_present(ht,x) (x < ht->max_entries && ht->table[x])
-
-/**
- * Finds a hash table entry with the given key and hash of that key.
- *
- * Returns NULL if no entry is found.  Note that the data pointer may be
- * modified by the user.
- */
 int_64 return (int_64)
